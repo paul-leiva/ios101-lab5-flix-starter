@@ -16,14 +16,30 @@ class ViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         /// Create, configure, and return a table view cell for the given row (i.e. 'indexPath.row')
         
-        /// Create the cell
-        let cell = UITableViewCell()
+        print("🍏  cellForRowAt called for row: \(indexPath.row)")
+        
+        /// Create a reusable cell
+        /// Returns a reusable TableViewCell object for the specified reuse identifier and adds it to the table. This helps optimize TableView performance as the app only needs to create enough cells to fill the screen and resue cells that scroll off the screen instead of creating new ones.
+        /// The identifier references the identifier you set for the cell previously in the storyboard.
+        /// The `dequeueResuableCell` method returns a regular `UITableViewCell`, so we must cast it as our custom cell (i.e. `as! movieCell`) to access the customer properties you added to the cell)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
         /// Get the movie-associated table view row
         let movie = movies[indexPath.row]
         
         /// Configure the cell (i.e. update UI elements like labels, image views, etc.)
-        cell.textLabel?.text = movie.title
+        /// Unwrap the optional poster path
+        if let posterPath = movie.poster_path,
+           
+            /// Create a URL by appending the poster path to the base URL. https://developers.themoviedb.org/3/getting-started/images
+           let imageUrl = URL(string: "https://image.tmdb.org/t/p/w500" + posterPath) {
+            
+            /// Use the Nuke library's loadImage function to (async) fetch and load the image form the image URL.
+            Nuke.loadImage(with: imageUrl, into: cell.posterImageView)
+        }
+          /// Set the text on the labels
+            cell.titleLabel.text = movie.title
+            cell.overviewLabel.text = movie.overview
         
         /// Return the cell for use in the respective table view row
         return cell
