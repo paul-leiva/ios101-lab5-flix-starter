@@ -9,21 +9,23 @@ import Nuke
 // TODO: Add table view data source conformance
 class ViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Return the number of rows for the table
-        return 50
+        /// Return the number of rows for the table
+        return movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Create, configure, and return a table view cell for the given row (i.e. 'indexPath.row')
+        /// Create, configure, and return a table view cell for the given row (i.e. 'indexPath.row')
         
-        // Create the cell
+        /// Create the cell
         let cell = UITableViewCell()
         
-        // Configure the cell (i.e. update UI elements like labels, image views, etc.)
-        // Get the row where the cell will be placed using the `row` property on the passed in `indexPath` (i.ee `indexPath.row`)
-        cell.textLabel?.text = "Row \(indexPath.row)"
+        /// Get the movie-associated table view row
+        let movie = movies[indexPath.row]
         
-        // Return the cell for use in the respective table view row
+        /// Configure the cell (i.e. update UI elements like labels, image views, etc.)
+        cell.textLabel?.text = movie.title
+        
+        /// Return the cell for use in the respective table view row
         return cell
     }
     
@@ -34,6 +36,8 @@ class ViewController: UIViewController, UITableViewDataSource {
     
 
     // TODO: Add property to store fetched movies array
+    /// Providing a default value of an empty array `[]` avoids having to deal with optionals
+    private var movies: [Movie] = []
 
 
     override func viewDidLoad() {
@@ -99,7 +103,11 @@ class ViewController: UIViewController, UITableViewDataSource {
                     }
 
                     // TODO: Store movies in the `movies` property on the view controller
-
+                    /// Update the movies property so we can access movie data anywhere in the view controller
+                    self?.movies = movies
+                    
+                    /// Reload data on the TableView
+                    self?.tableView.reloadData()
 
 
                 }
